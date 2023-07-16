@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "D87A18E9-0E3C-41BF-91CB-7B3652813060",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "OctonionTests",
+        "name" : "OctonionTests"
+      }
+    }
+  ],
+  "version" : 1
+}
