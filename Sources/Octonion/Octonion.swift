@@ -35,6 +35,10 @@ extension Octonion {
     lhs = lhs - rhs
   }
   
+  public static prefix func -(x: Octonion) -> Octonion {
+    return Octonion([-x.e0, -x.e1, -x.e2, -x.e3, -x.e4, -x.e5, -x.e6, -x.e7])
+  }
+  
   public var e0: RealType {
     return self.components[0]
   }

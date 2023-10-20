@@ -33,4 +33,10 @@ final class OctonionTests: XCTestCase {
         
         XCTAssertEqual(o1, Octonion([1, 1, 1, 1, 1, 1, 1, 1]))
     }
+    
+    func testNegation() throws {
+        let o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
+        
+        XCTAssertEqual(-o1, Octonion([-1, -2, -3, -4, -5, -6, -7, -8]))
+    }
 }
