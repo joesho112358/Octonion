@@ -12,6 +12,6 @@ let z = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
 Octonion.CayleyDicksonConstruction(y, z)
 ```
 
-Octonion.CayleyDicksonConstruction works with Quaternion, Complex, and RealType from Numerics, as well.
+Octonion.CayleyDicksonConstruction works with Quaternion, Complex, and RealType from Numerics, as well... albeit in a naive way for now.
 
 For reference: https://en.wikipedia.org/wiki/Octonion
