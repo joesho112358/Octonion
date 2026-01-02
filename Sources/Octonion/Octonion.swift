@@ -5,18 +5,13 @@ public struct Octonion<RealType> where RealType: Real & SIMDScalar {
   @usableFromInline @inline(__always)
   internal var components: SIMD8<RealType>
   
-  @usableFromInline @inline(__always)
-  internal init(from components: SIMD8<RealType>) {
-    self.components = components
-  }
-  
 }
 
 extension Octonion {
   
   @inlinable
   public init(_ components: SIMD8<RealType>) {
-    self.init(from: components)
+      self.components = components
   }
 
   public static func +(lhs: Octonion, rhs: Octonion) -> Octonion {
@@ -28,47 +23,30 @@ extension Octonion {
   }
 
   public static func +=(lhs: inout Octonion, rhs: Octonion) {
-    lhs = lhs + rhs
+    lhs.components += rhs.components
   }
 
   public static func -=(lhs: inout Octonion, rhs: Octonion) {
-    lhs = lhs - rhs
+    lhs.components -= rhs.components
   }
   
   public static prefix func -(x: Octonion) -> Octonion {
-    return Octonion([-x.e0, -x.e1, -x.e2, -x.e3, -x.e4, -x.e5, -x.e6, -x.e7])
+    return Octonion(-x.components)
   }
   
-  public var e0: RealType {
-    return self.components[0]
-  }
-  
-  public var e1: RealType {
-    return self.components[1]
-  }
-  
-  public var e2: RealType {
-    return self.components[2]
-  }
-  
-  public var e3: RealType {
-    return self.components[3]
-  }
-  
-  public var e4: RealType {
-    return self.components[4]
-  }
-  
-  public var e5: RealType {
-    return self.components[5]
-  }
-  
-  public var e6: RealType {
-    return self.components[6]
-  }
-  
-  public var e7: RealType {
-    return self.components[7]
-  }
+  // component access
+    
+  public var e0: RealType { return self.components[0] }
+  public var e1: RealType { return self.components[1] }
+  public var e2: RealType { return self.components[2] }
+  public var e3: RealType { return self.components[3] }
+  public var e4: RealType { return self.components[4] }
+  public var e5: RealType { return self.components[5] }
+  public var e6: RealType { return self.components[6] }
+  public var e7: RealType { return self.components[7] }
 
+  public subscript(_ index: Int) -> RealType {
+    get { components[index] }
+    set { components[index] = newValue }
+  }
 }
