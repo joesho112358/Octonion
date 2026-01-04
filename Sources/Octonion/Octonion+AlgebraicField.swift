@@ -4,7 +4,8 @@ import Numerics
 extension Octonion {
 
     public var conjugate: Octonion {
-      Octonion(from: components * [1, -1, -1, -1, -1, -1, -1, -1])
+      let signMask = SIMD8<RealType>(1, -1, -1, -1, -1, -1, -1, -1)
+      return Octonion(components * signMask)
     }
 
     public static func *(lhs: Octonion, rhs: Octonion) -> Octonion {
@@ -16,17 +17,16 @@ extension Octonion {
     }
     
     public var norm: RealType {
-      (
-        self.conjugate * self
-      ).e0.squareRoot()
+      let squared = (self.conjugate * self).e0
+      return RealType.sqrt(squared)
     }
     
     public var inverse: Octonion {
+      precondition(norm != 0, "No inverse if norm is 0")
       let conj = self.conjugate
-      let norm = self.norm
-      let denom = norm * norm
+      let denom = self.norm * self.norm
       
-      return Octonion([
+      return Octonion(SIMD8(
         conj.e0/denom,
         conj.e1/denom,
         conj.e2/denom,
@@ -35,6 +35,6 @@ extension Octonion {
         conj.e5/denom,
         conj.e6/denom,
         conj.e7/denom
-      ])
+      ))
     }
 }
