@@ -1,59 +1,79 @@
 import Numerics
 
+public protocol CayleyDicksonAlgebra: Equatable {
+    associatedtype RealType
+
+    var conjugate: Self { get }
+    static func +(lhs: Self, rhs: Self) -> Self
+    static func -(lhs: Self, rhs: Self) -> Self
+    static func *(lhs: Self, rhs: Self) -> Self
+}
+
+extension Complex: CayleyDicksonAlgebra where RealType: Real & SIMDScalar {
+    @inlinable public var conjugate: Complex<RealType> {
+        Complex(real, -imaginary)
+    }
+}
+
+extension Quaternion: CayleyDicksonAlgebra where RealType: Real & SIMDScalar {
+    @inlinable public var conjugate: Quaternion<RealType> {
+        Quaternion(real:  real,
+                   imaginary: SIMD3(-imaginary.x, -imaginary.y, -imaginary.z))
+    }
+}
+
 extension Octonion {
-    public static func CayleyDicksonConstruction(_ lhs: RealType, _ rhs: RealType) -> RealType {
-        return lhs * rhs
+    
+    private static func cdMultiply
+        (_ a: RealType, _ b: RealType, _ c: RealType, _ d: RealType) -> (RealType, RealType)
+    {
+        let left = a * c - d * b
+        let right = d * a + b * c
+        return (left, right)
+    }
+    
+    private static func cdMultiply<T: CayleyDicksonAlgebra>
+        (_ a: T, _ b: T, _ c: T, _ d: T) -> (T, T)
+    {
+        let left = a * c - d.conjugate * b
+        let right = d * a + b * c.conjugate
+        return (left, right)
     }
 
     public static func CayleyDicksonConstruction(_ lhs: Complex<RealType>, _ rhs: Complex<RealType>) -> Complex<RealType> {
-        var r = lhs.real
-        var i = lhs.imaginary
-        let a = r
-        let b = i
+        let a = lhs.real
+        let b = lhs.imaginary
+
+        let c = rhs.real
+        let d = rhs.imaginary
         
-        r = rhs.real
-        i = rhs.imaginary
-        let c = r
-        let d = i
-        
-        let real = CayleyDicksonConstruction(a, c) - CayleyDicksonConstruction(d, b)
-        let imaginary = CayleyDicksonConstruction(d, a) + CayleyDicksonConstruction(b, c)
-        return Complex(real, imaginary)
+        let (left, right) = cdMultiply(a, b, c, d)
+        return Complex(left, right)
     }
 
     public static func CayleyDicksonConstruction(_ lhs: Quaternion<RealType>, _ rhs: Quaternion<RealType>) -> Quaternion<RealType> {
-        var r = lhs.real
-        var i = lhs.imaginary.x
-        var j = lhs.imaginary.y
-        var k = lhs.imaginary.z
-        let a = Complex(r, i)
-        let b = Complex(j, k)
+        let a = Complex(lhs.real, lhs.imaginary.x)
+        let b = Complex(lhs.imaginary.y, lhs.imaginary.z)
+
+        let c = Complex(rhs.real, rhs.imaginary.x)
+        let d = Complex(rhs.imaginary.y, rhs.imaginary.z)
         
-        r = rhs.real
-        i = rhs.imaginary.x
-        j = rhs.imaginary.y
-        k = rhs.imaginary.z
-        let c = Complex(r, i)
-        let d = Complex(j, k)
+        let (left, right) = cdMultiply(a, b, c, d)
         
-        let left = CayleyDicksonConstruction(a, c) - CayleyDicksonConstruction(d.conjugate, b)
-        let right = CayleyDicksonConstruction(d, a) + CayleyDicksonConstruction(b, c.conjugate)
-        
-        return Quaternion(real: left.real, imaginary: left.imaginary, right.real, right.imaginary)
+        return Quaternion(
+            real: left.real,
+            imaginary: SIMD3(left.imaginary, right.real, right.imaginary)
+        )
     }
 
     public static func CayleyDicksonConstruction(_ lhs: Octonion, _ rhs: Octonion) -> Octonion {
+        let a = Quaternion(real: lhs.e0, imaginary: lhs.e1, lhs.e2, lhs.e3)
+        let b = Quaternion(real: lhs.e4, imaginary: lhs.e5, lhs.e6, lhs.e7)
         
-        let leftQuaternions = lhs.splitToQuaternions()
-        let rightQuaternions = rhs.splitToQuaternions()
+        let c = Quaternion(real: rhs.e0, imaginary: rhs.e1, rhs.e2, rhs.e3)
+        let d = Quaternion(real: rhs.e4, imaginary: rhs.e5, rhs.e6, rhs.e7)
         
-        let a = leftQuaternions[0]
-        let b = leftQuaternions[1]
-        let c = rightQuaternions[0]
-        let d = rightQuaternions[1]
-        
-        let left = CayleyDicksonConstruction(a, c) - CayleyDicksonConstruction(d.conjugate, b)
-        let right = CayleyDicksonConstruction(d, a) + CayleyDicksonConstruction(b, c.conjugate)
+        let (left, right) = cdMultiply(a, b, c, d)
         
         return Octonion([
             left.real,
@@ -66,23 +86,4 @@ extension Octonion {
             right.imaginary.z
         ])
     }
-    
-    
-  // The intended use for this is the Cayley-Dickson Construction
-  internal func splitToQuaternions() -> Array<Quaternion<RealType>> {
-    let r1 = self.e0
-    let i1 = self.e1
-    let j1 = self.e2
-    let k1 = self.e3
-    
-    let r2 = self.e4
-    let i2 = self.e5
-    let j2 = self.e6
-    let k2 = self.e7
-    
-    return [
-      Quaternion(real: r1, imaginary: i1, j1, k1),
-      Quaternion(real: r2, imaginary: i2, j2, k2)
-    ]
-  }
 }
