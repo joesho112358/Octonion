@@ -4,12 +4,12 @@ import Numerics
 
 final class CayleyDicksonConstructionTests: XCTestCase {
 
-    func testComplex() throws {
+    func testComplex() {
         let x = Octonion.CayleyDicksonConstruction(Complex(1, 10), Complex(4, 5))
         XCTAssertEqual(x, Complex(1, 10) * Complex(4, 5))
     }
 
-    func testQuaternion() throws {
+    func testQuaternion() {
         let x = Octonion.CayleyDicksonConstruction(
             Quaternion(real: 1, imaginary: 0, 1, 0),
             Quaternion(real: 1, imaginary: 0.5, 0.5, 0.75)
@@ -38,7 +38,7 @@ final class CayleyDicksonConstructionTests: XCTestCase {
         )
     }
     
-    func testOctonion() throws {
+    func testOctonion() {
         let x = Octonion.CayleyDicksonConstruction(
             Octonion([1, 1, 1, 1, 1, 1, 1, 1]),
             Octonion([1, 2, 3, 4, 5, 6, 7, 8])
@@ -46,7 +46,7 @@ final class CayleyDicksonConstructionTests: XCTestCase {
         XCTAssertEqual(x, Octonion([-34, 4, 6, 8, -6, 8, 14, 8]))
     }
     
-    func testOctonionZero() throws {
+    func testOctonionZero() {
         let x = Octonion.CayleyDicksonConstruction(
             Octonion([0, 0, 0, 0, 0, 0, 0, 0]),
             Octonion([1, 2, 3, 4, 5, 6, 7, 8])

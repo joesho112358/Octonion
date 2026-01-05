@@ -2,14 +2,14 @@ import XCTest
 @testable import Octonion
 
 final class OctonionTests: XCTestCase {
-    func testAddition() throws {
+    func testAddition() {
         let o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         let o2 = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
         
         XCTAssertEqual(o1 + o2, Octonion([1, 3, 5, 7, 9, 11, 13, 15]))
     }
     
-    func testAdditionAndSet() throws {
+    func testAdditionAndSet() {
         var o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         let o2 = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
         
@@ -18,14 +18,14 @@ final class OctonionTests: XCTestCase {
         XCTAssertEqual(o1, Octonion([1, 3, 5, 7, 9, 11, 13, 15]))
     }
     
-    func testSubtraction() throws {
+    func testSubtraction() {
         let o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         let o2 = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
         
         XCTAssertEqual(o1 - o2, Octonion([1, 1, 1, 1, 1, 1, 1, 1]))
     }
     
-    func testSubtractionAndSet() throws {
+    func testSubtractionAndSet() {
         var o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         let o2 = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
         
@@ -34,13 +34,13 @@ final class OctonionTests: XCTestCase {
         XCTAssertEqual(o1, Octonion([1, 1, 1, 1, 1, 1, 1, 1]))
     }
     
-    func testNegation() throws {
+    func testNegation() {
         let o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         
         XCTAssertEqual(-o1, Octonion([-1, -2, -3, -4, -5, -6, -7, -8]))
     }
     
-    func testAccess() throws {
+    func testAccess() {
         let o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         
         XCTAssertEqual(o1[0], o1.e0)
@@ -53,7 +53,7 @@ final class OctonionTests: XCTestCase {
         XCTAssertEqual(o1[7], o1.e7)
     }
     
-    func testUpdating() throws {
+    func testUpdating() {
         var o1 = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
         let o2 = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
         
