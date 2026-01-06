@@ -60,4 +60,33 @@ final class OctonionTests: XCTestCase {
         o1[0] -= 1
         XCTAssertEqual(o1.e0, o2.e0)
     }
+    
+    func testAlternativity() {
+        let a = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
+        let b = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
+        
+        // left alternativity
+        XCTAssertEqual((a * a) * b, a * (a * b))
+        
+        // right alternativity
+        XCTAssertEqual(b * (a * a), (b * a) * a)
+    }
+    
+    func testMoufangIdentities() {
+        let x = Octonion([2, 3, 4, 5, 6, 7, 8, 9])
+        let y = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
+        let z = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
+        
+        XCTAssertEqual(z * ( x * (z * y)), ((z * x) * z) * y)
+        XCTAssertEqual(x * ( z * (y * z)), ((x * z) * y) * z)
+        XCTAssertEqual((z * x) * (y * z), (z * (x * y)) * z)
+        XCTAssertEqual((z * x) * (y * z), z * ((x * y) * z))
+    }
+    
+    func testNormProperty() {
+        let x = Octonion([1, 2, 3, 4, 5, 6, 7, 8])
+        let y = Octonion([0, 1, 2, 3, 4, 5, 6, 7])
+        
+        XCTAssertEqual((x * y).norm, x.norm * y.norm)
+    }
 }
