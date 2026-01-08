@@ -101,4 +101,9 @@ extension Octonion {
         }
         return result
     }
+    
+    public func imaginaryMultiplication(_ rhs: Octonion) throws -> (RealType, RealType, RealType, RealType, RealType, RealType, RealType) {
+        let result = try self.multiplication(rhs)
+        return result.imaginary
+    }
 }

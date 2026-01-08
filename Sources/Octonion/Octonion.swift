@@ -49,4 +49,20 @@ extension Octonion {
     get { components[index] }
     set { components[index] = newValue }
   }
+    
+  public var real: RealType {
+    return self.e0
+  }
+    
+    public var imaginary: (RealType, RealType, RealType, RealType, RealType, RealType, RealType) {
+      return (
+        self[1],
+        self[2],
+        self[3],
+        self[4],
+        self[5],
+        self[6],
+        self[7]
+    )
+  }
 }
